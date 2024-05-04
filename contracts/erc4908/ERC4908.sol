@@ -15,10 +15,10 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
     mapping(bytes32 hash => Settings) public accessControl;
 
     // struct attached to each NFT id
-    struct Metadata {           // Is this some sort of zk proof (?)
-        bytes32 hash;           // <- server can authenticate author and contentId but doesn't know about the access price set
+    struct Metadata {
+        bytes32 hash;
         uint256 contentId;
-        uint32 expirationTime;  // <- public only know expiration time of a specific NFT
+        uint32 expirationTime;
     }
 
     mapping(uint256 => Metadata) public nftData;
