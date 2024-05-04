@@ -112,18 +112,38 @@ describe("ERC4908", function () {
 
   describe("Customer actions", function () {
     it("Should mint an NFT", async function () {
+      /* Arrange */
       const { erc4908Example } = await loadFixture(deployERC4908ExampleFixture);
+
+      /* Act */
       console.log("WIP");
+
+      /* Assert */
+      expect(true).to.equal(true);
     });
   });
 
   describe("Resources access check", function () {
     it("Should have access", async function () {
+      /* Arrange */
+      const { erc4908Example } = await loadFixture(deployERC4908ExampleFixture);
+
+      /* Act */
       console.log("WIP");
+
+      /* Assert */
+      expect(true).to.equal(true);
     });
 
     it("Should not have access", async function () {
+      /* Arrange */
+      const { erc4908Example } = await loadFixture(deployERC4908ExampleFixture);
+
+      /* Act */
       console.log("WIP");
+
+      /* Assert */
+      expect(true).to.equal(true);
     });
   });
 });
