@@ -15,16 +15,20 @@ describe("ERC4908", function () {
     };
   }
 
+  const Mock = {
+    contentId: BigInt(1),
+    price: BigInt(2),
+    expirationTime: 3
+  };
+
   describe("Author actions", function () {
     it("Should set access", async function () {
 
       /* Arrange */
 
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
+      const { contentId, price, expirationTime } = Mock;
 
-      const contentId = BigInt(1);
-      const price = BigInt(2);
-      const expirationTime = 3;
       const expectedHash = keccak256(encodePacked(
         ['address', 'uint256'],
         [wallet.account.address, contentId]
@@ -47,10 +51,8 @@ describe("ERC4908", function () {
       /* Arrange */
 
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
+      const { contentId, price, expirationTime } = Mock;
 
-      const contentId = BigInt(1);
-      const price = BigInt(2);
-      const expirationTime = 3;
       const expectedHash = keccak256(encodePacked(
         ['address', 'uint256'],
         [wallet.account.address, contentId]
@@ -73,10 +75,8 @@ describe("ERC4908", function () {
       /* Arrange */
       
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
-
-      const contentId = BigInt(1);
-      const price = BigInt(2);
-      const expirationTime = 3;
+      const { contentId, price, expirationTime } = Mock;
+      
       const expectedHash = keccak256(encodePacked(
         ['address', 'uint256'],
         [wallet.account.address, contentId]
