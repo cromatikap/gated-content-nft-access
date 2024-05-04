@@ -17,26 +17,96 @@ describe("ERC4908", function () {
 
   describe("Author actions", function () {
     it("Should set access", async function () {
+
+      /* Arrange */
+
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
 
       const contentId = BigInt(1);
       const price = BigInt(2);
       const expirationTime = 3;
-      const accessHash = keccak256(encodePacked(
+      const expectedHash = keccak256(encodePacked(
         ['address', 'uint256'],
         [wallet.account.address, contentId]
       ));
 
+      /* Act */
+
       await erc4908Example.write.setAccess([contentId, price, expirationTime])
-      const access = await erc4908Example.read.accessControl([accessHash]);
+      const access = await erc4908Example.read.accessControl([expectedHash]);
+
+      /* Assert */
 
       expect(access[0]).to.equal(contentId);
       expect(access[1]).to.equal(price);
       expect(access[2]).to.equal(expirationTime);
     });
 
+    it("Should check if access exists", async function () {
+
+      /* Arrange */
+
+      const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
+
+      const contentId = BigInt(1);
+      const price = BigInt(2);
+      const expirationTime = 3;
+      const expectedHash = keccak256(encodePacked(
+        ['address', 'uint256'],
+        [wallet.account.address, contentId]
+      ));
+
+      /* Act */
+
+      const before = await erc4908Example.read.existAccess([expectedHash]);
+      await erc4908Example.write.setAccess([contentId, price, expirationTime]);
+      const after = await erc4908Example.read.existAccess([expectedHash]);
+
+      /* Assert */
+
+      expect(before).to.equal(false);
+      expect(after).to.equal(true);
+    })
+
     it("Should delete access", async function () {
-      console.log("WIP");
+
+      /* Arrange */
+      
+      const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
+
+      const contentId = BigInt(1);
+      const price = BigInt(2);
+      const expirationTime = 3;
+      const expectedHash = keccak256(encodePacked(
+        ['address', 'uint256'],
+        [wallet.account.address, contentId]
+      ));
+
+      await erc4908Example.write.setAccess([contentId, price, expirationTime]);
+
+      /* Act */
+
+      const before = {
+        exists: await erc4908Example.read.existAccess([expectedHash]),
+        settings: await erc4908Example.read.accessControl([expectedHash])
+      };
+      await erc4908Example.write.delAccess([contentId]);
+      const after = { 
+        exists: await erc4908Example.read.existAccess([expectedHash]),
+        settings: await erc4908Example.read.accessControl([expectedHash])
+      };
+
+      /* Assert */
+
+      expect(before.exists).to.equal(true);
+      expect(after.exists).to.equal(false);
+      // Check if all settings are reset
+      expect(before.settings[0]).to.equal(contentId);
+      expect(before.settings[1]).to.equal(price);
+      expect(before.settings[2]).to.equal(expirationTime);
+      expect(after.settings[0]).to.equal(0n);
+      expect(after.settings[1]).to.equal(0n);
+      expect(after.settings[2]).to.equal(0);
     });
   });
 

@@ -38,6 +38,10 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         _setAccess(msg.sender, contentId, price, expirationTime);
     }
 
+    function existAccess(bytes32 hash) external view returns (bool) {
+        return accessControl[hash].contentId != 0;
+    }
+
     function mint(address author, uint256 contentId, address to) external {
         uint256 tokenId = totalSupply();
         bytes32 settings = _hash(author, contentId);
@@ -63,7 +67,10 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         return false;
     }
 
-    function delAccess(uint256 contentId) external {}
+    function delAccess(uint256 contentId) external {
+        bytes32 hash = _hash(msg.sender, contentId);
+        delete accessControl[hash];
+    }
 
 
     /* 
