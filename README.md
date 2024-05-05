@@ -1,3 +1,5 @@
+![](https://i-p.rmcdn.net/65fd9abf114acc00326b972c/4693032/image-dbef989c-7504-46cf-97e1-410a19916f20.png?e=webp&nll=true)
+
 # Gated content NFT access
 
 Tailored for the needs of the [Ipal platform](https://app.ipal.network/), a web3 friendly [knowledge management platform](https://en.wikipedia.org/wiki/Knowledge_management_software).
