@@ -1,17 +1,18 @@
+import hre from "hardhat";
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers";
 import { expect } from "chai";
-import hre from "hardhat";
 import { keccak256, encodePacked } from "viem";
 
 describe("ERC4908", function () {
   async function deployERC4908ExampleFixture() {
 
-    const [wallet] = await hre.viem.getWalletClients();
-    const erc4908Example = await hre.viem.deployContract("ERC4908Example" as "Example", []);
-
+    const [wallet, ...wallets] = await hre.viem.getWalletClients();
+    const erc4908Example = await hre.viem.deployContract("ERC4908Example", []);
+    
     return {
       erc4908Example,
-      wallet
+      wallet,
+      wallets
     };
   }
 
@@ -20,6 +21,18 @@ describe("ERC4908", function () {
     price: BigInt(2),
     expirationTime: 3
   };
+
+  /*
+   * { impersonateAccount } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers";
+   * doesn't work so here is the home made version
+   */
+  const impersonate = async (contract: any, account: any) =>
+    await hre.viem.getContractAt(
+      "ERC4908Example",
+      contract.address,
+      { client: { wallet: account } }
+    );
+
 
   describe("Author actions", function () {
     it("Should set access", async function () {
@@ -110,16 +123,33 @@ describe("ERC4908", function () {
     });
   });
 
-  describe("Customer actions", function () {
+  describe("Access minting", function () {
     it("Should mint an NFT", async function () {
+
       /* Arrange */
-      const { erc4908Example } = await loadFixture(deployERC4908ExampleFixture);
+
+      const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
+      const { contentId, price, expirationTime } = Mock;
+      const [Alice, Bob] = wallets;
+
+      let contract = await impersonate(erc4908Example, Alice);
+      await contract.write.setAccess([contentId, price, expirationTime]);
 
       /* Act */
-      console.log("WIP");
+
+      /* 
+        Test revertWith but doesn't have access to this method
+        This project initialization with viem sucks and need to be changed
+        too much tools are missing
+      */
+      // expect(contract.write.mint([Bob.account.address, contentId, Alice.account.address])).to.be.revertedWith("ERC4908: author hasn't activated mint access for this contentId");
+
+      contract = await impersonate(erc4908Example, Bob);
+      await contract.write.mint([Alice.account.address, contentId, Bob.account.address]);
 
       /* Assert */
-      expect(true).to.equal(true);
+
+      expect(await erc4908Example.read.totalSupply()).to.equal(1n);
     });
   });
 

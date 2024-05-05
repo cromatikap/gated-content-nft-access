@@ -43,8 +43,10 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
     }
 
     function mint(address author, uint256 contentId, address to) external {
-        uint256 tokenId = totalSupply();
         bytes32 settings = _hash(author, contentId);
+        require(this.existAccess(settings) == true, "ERC4908: author hasn't activated mint access for this contentId");
+        
+        uint256 tokenId = totalSupply();
         
         nftData[tokenId] = Metadata(
             settings,
