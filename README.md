@@ -1,6 +1,6 @@
 # Gated content NFT access
 
-Tailored for the needs of the [Ipal](https://app.ipal.network/), a web3 friendly [knowledge management platform](https://en.wikipedia.org/wiki/Knowledge_management_software).
+Tailored for the needs of the [Ipal platform](https://app.ipal.network/), a web3 friendly [knowledge management platform](https://en.wikipedia.org/wiki/Knowledge_management_software).
 See the [specification](./contracts/erc4908/README.md) for more details.
 
 ## Development
