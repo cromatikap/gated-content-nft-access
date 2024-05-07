@@ -56,8 +56,6 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         return accessControl[hash].contentId != 0;
     }
 
-    error MintUnavailable(bytes32 accessHash);
-
     function mint(address author, uint256 contentId, address to) external {
         bytes32 settings = _hash(author, contentId);
         if (!this.existAccess(settings))
