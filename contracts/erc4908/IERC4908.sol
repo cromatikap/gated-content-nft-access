@@ -39,4 +39,8 @@ interface IERC4908 {
         uint256 contentId,
         address consumer
     ) external view returns (bool);
+
+    /// @notice The author hasn't activated mint access for this contentId
+    /// @param accessHash The hash of the author and contentId, used as the index of settings mapping
+    error MintUnavailable(bytes32 accessHash);
 }
