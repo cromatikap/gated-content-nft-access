@@ -2,13 +2,16 @@
 pragma solidity ^0.8.24;
 
 interface IERC4908 {
-
     /// @notice Allows content access NFT to be minted
     /// @dev This function is meant to be called by the content author
     /// @param contentId The content identification from the off-chain content service provider
     /// @param price The mint price, in other terms the access price for this particular content
     /// @param expirationTime The expiration time of the access
-    function setAccess(uint256 contentId, uint256 price, uint32 expirationTime) external;
+    function setAccess(
+        uint256 contentId,
+        uint256 price,
+        uint32 expirationTime
+    ) external;
 
     /// @notice Disallows content access NFT to be minted, the remaining NFTs can still be used
     /// @dev This function is meant to be called by the content author
@@ -31,5 +34,9 @@ interface IERC4908 {
     /// @param contentId The content identification from the off-chain content service provider
     /// @param consumer The address of the content consumer
     /// @return bool True if the consumer has access to the content, false otherwise
-    function hasAccess(address author, uint256 contentId, address consumer) external view returns (bool);
+    function hasAccess(
+        address author,
+        uint256 contentId,
+        address consumer
+    ) external view returns (bool);
 }

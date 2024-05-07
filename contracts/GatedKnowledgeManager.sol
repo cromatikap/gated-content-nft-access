@@ -7,6 +7,5 @@ pragma solidity ^0.8.24;
 import {ERC4908} from "./erc4908/ERC4908.sol";
 
 contract GatedKnowledgeManager is ERC4908 {
-    constructor() 
-    ERC4908("Ipal Gated Knowledge Manager", "IGI") {}
+    constructor() ERC4908("Ipal Gated Knowledge Manager", "IGI") {}
 }
