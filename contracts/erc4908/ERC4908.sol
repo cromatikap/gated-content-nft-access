@@ -56,7 +56,11 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         return accessControl[hash].contentId != 0;
     }
 
-    function mint(address author, uint256 contentId, address to) external {
+    function mint(
+        address author,
+        uint256 contentId,
+        address to
+    ) public virtual {
         bytes32 settings = _hash(author, contentId);
         if (!this.existAccess(settings))
             revert MintUnavailable({accessHash: settings});
@@ -103,20 +107,20 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         address to,
         uint256 tokenId,
         address auth
-    ) internal override(ERC721, ERC721Enumerable) returns (address) {
+    ) internal virtual override(ERC721, ERC721Enumerable) returns (address) {
         return super._update(to, tokenId, auth);
     }
 
     function _increaseBalance(
         address account,
         uint128 value
-    ) internal override(ERC721, ERC721Enumerable) {
+    ) internal virtual override(ERC721, ERC721Enumerable) {
         super._increaseBalance(account, value);
     }
 
     function supportsInterface(
         bytes4 interfaceId
-    ) public view override(ERC721, ERC721Enumerable) returns (bool) {
+    ) public view virtual override(ERC721, ERC721Enumerable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 }
