@@ -11,7 +11,13 @@ See the [specification](./contracts/erc4908/README.md) for more details.
 
 ```sh
 npm install
-REPORT_GAS=true npx hardhat test
+```
+
+### Running tests and linting
+
+```sh
+npm run test
+npm run lint
 ```
 
 ### Deploying the contracts
