@@ -132,23 +132,31 @@ describe("ERC4908", function () {
       const { contentId, price, expirationTime } = Mock;
       const [Alice, Bob] = wallets;
 
-      let contract = await impersonate(erc4908Example, Alice);
-      await contract.write.setAccess([contentId, price, expirationTime]);
+      let alice = await impersonate(erc4908Example, Alice);
+      let bob = await impersonate(erc4908Example, Bob);
+
+      await alice.write.setAccess([contentId, price, expirationTime]);
 
       /* Act */
 
-      /* 
-        Test revertWith but doesn't have access to this method
-        This project initialization with viem sucks and need to be changed
-        too much tools are missing
-      */
-      // expect(contract.write.mint([Bob.account.address, contentId, Alice.account.address])).to.be.revertedWith("ERC4908: author hasn't activated mint access for this contentId");
+      const mintUnavailableContent = alice.write.mint([
+        Bob.account.address, 
+        contentId, 
+        Alice.account.address
+      ])
 
-      contract = await impersonate(erc4908Example, Bob);
-      await contract.write.mint([Alice.account.address, contentId, Bob.account.address]);
+      const mintAvailableContent = bob.write.mint([
+        Alice.account.address,
+        contentId,
+        Bob.account.address
+      ])
 
       /* Assert */
-
+      
+      await expect(mintUnavailableContent).to.be.rejectedWith(
+        'MintUnavailable("0x320723cfc0bfa9b0f7c5b275a01ffa5e0f111f05723ba5df2b2684ab86bebe06")'
+      );
+      await expect(mintAvailableContent).to.be.fulfilled;
       expect(await erc4908Example.read.totalSupply()).to.equal(1n);
     });
   });

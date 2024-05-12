@@ -61,16 +61,16 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         uint256 contentId,
         address to
     ) public virtual {
-        bytes32 settings = _hash(author, contentId);
-        if (!this.existAccess(settings))
-            revert MintUnavailable({accessHash: settings});
+        bytes32 settingsIndex = _hash(author, contentId);
+        if (!this.existAccess(settingsIndex))
+            revert MintUnavailable(settingsIndex);
 
         uint256 tokenId = totalSupply();
 
         nftData[tokenId] = Metadata(
-            settings,
-            accessControl[settings].contentId,
-            accessControl[settings].expirationTime
+            settingsIndex,
+            accessControl[settingsIndex].contentId,
+            accessControl[settingsIndex].expirationTime
         );
 
         _safeMint(to, tokenId);
