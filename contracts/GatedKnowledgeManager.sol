@@ -7,6 +7,7 @@ pragma solidity ^0.8.24;
 import {ERC4908} from "./erc4908/ERC4908.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
 contract GatedKnowledgeManager is ERC4908, ERC721URIStorage {
     string public _tokenURI;
@@ -23,7 +24,8 @@ contract GatedKnowledgeManager is ERC4908, ERC721URIStorage {
         address to
     ) public override(ERC4908) {
         super.mint(author, contentId, to);
-        _setTokenURI(totalSupply() - 1, _tokenURI);
+        uint256 tokenId = totalSupply() - 1;
+        _setTokenURI(tokenId, string.concat(_tokenURI, Strings.toString(tokenId)));
     }
 
     /*

@@ -34,13 +34,19 @@ describe("Ipal Gated Knowledge Manager", function () {
 
     await alice.write.setAccess([contentId, price, expirationTime]);
     await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+    await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+    await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
 
     /* Act */
     
-    const tokenURI = await GKM.read.tokenURI([0n]);
+    const tokenURI_0 = await GKM.read.tokenURI([0n]);
+    const tokenURI_1 = await GKM.read.tokenURI([1n]);
+    const tokenURI_2 = await GKM.read.tokenURI([2n]);
 
     /* Assert */
     
-    expect(tokenURI).to.equal(baseUri);
+    expect(tokenURI_0).to.equal(`${baseUri}0`);
+    expect(tokenURI_1).to.equal(`${baseUri}1`);
+    expect(tokenURI_2).to.equal(`${baseUri}2`);
   });
 });
