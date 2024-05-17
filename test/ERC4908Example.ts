@@ -2,6 +2,7 @@ import hre from "hardhat";
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers";
 import { expect } from "chai";
 import { keccak256, encodePacked } from "viem";
+import { impersonate, paramsDefault } from "./utils";
 
 describe("ERC4908", function () {
   async function deployERC4908ExampleFixture() {
@@ -10,29 +11,11 @@ describe("ERC4908", function () {
     const erc4908Example = await hre.viem.deployContract("ERC4908Example", []);
     
     return {
-      erc4908Example,
       wallet,
-      wallets
+      wallets,
+      erc4908Example
     };
   }
-
-  const Mock = {
-    contentId: BigInt(1),
-    price: BigInt(2),
-    expirationTime: 3
-  };
-
-  /*
-   * { impersonateAccount } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers";
-   * doesn't work so here is the home made version
-   */
-  const impersonate = async (contract: any, account: any) =>
-    await hre.viem.getContractAt(
-      "ERC4908Example",
-      contract.address,
-      { client: { wallet: account } }
-    );
-
 
   describe("Author actions", function () {
     it("Should set access", async function () {
@@ -40,7 +23,7 @@ describe("ERC4908", function () {
       /* Arrange */
 
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
-      const { contentId, price, expirationTime } = Mock;
+      const { contentId, price, expirationTime } = paramsDefault;
 
       const expectedHash = keccak256(encodePacked(
         ['address', 'uint256'],
@@ -64,7 +47,7 @@ describe("ERC4908", function () {
       /* Arrange */
 
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
-      const { contentId, price, expirationTime } = Mock;
+      const { contentId, price, expirationTime } = paramsDefault;
 
       const expectedHash = keccak256(encodePacked(
         ['address', 'uint256'],
@@ -88,7 +71,7 @@ describe("ERC4908", function () {
       /* Arrange */
       
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
-      const { contentId, price, expirationTime } = Mock;
+      const { contentId, price, expirationTime } = paramsDefault;
       
       const expectedHash = keccak256(encodePacked(
         ['address', 'uint256'],
@@ -129,7 +112,7 @@ describe("ERC4908", function () {
       /* Arrange */
 
       const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
-      const { contentId, price, expirationTime } = Mock;
+      const { contentId, price, expirationTime } = paramsDefault;
       const [Alice, Bob] = wallets;
 
       let alice = await impersonate(erc4908Example, Alice);
