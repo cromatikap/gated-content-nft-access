@@ -7,7 +7,7 @@ const config: HardhatUserConfig = {
     testnet: {
       url: "https://sepolia.base.org",
       chainId: 84532,
-      accounts: [process.env.DEPLOYER_KEY!]
+      accounts: [process.env.DEPLOYER_KEY!],
     },
     mainnet: {
       url: "https://mainnet.base.org",
@@ -22,6 +22,11 @@ const config: HardhatUserConfig = {
         enabled: true,
         runs: 200
       }
+    }
+  },
+  etherscan: {
+    apiKey: {
+      baseSepolia: process.env.ETHERSCAN_API_KEY!
     }
   }
 };

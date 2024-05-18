@@ -5,6 +5,15 @@
 Tailored for the needs of the [Ipal platform](https://app.ipal.network/), a web3 friendly [knowledge management platform](https://en.wikipedia.org/wiki/Knowledge_management_software).
 See the [specification](./contracts/erc4908/README.md) for more details.
 
+## Platform implementation
+
+To prove that 0xAlice has access to 0xBob's specific information, the server must:
+
+1. Authenticate 0xAlice via a message wallet signature request.
+2. verify locally that `contentId` belongs to 0xBob.
+3. call the `hasAccess(0xBob, contentId, 0xAlice)` contract function
+4. verify that the result returned is `true`
+
 ## Development
 
 ### Getting started
@@ -28,14 +37,16 @@ vim .env # Add the private key you want to use to deploy the contracts
 npx hardhat ignition deploy ./ignition/modules/IpalBases.ts --network testnet --reset
 ```
 
-### Platform implementation
+### Verifying the contracts
 
-To prove that 0xAlice has access to 0xBob's specific information, the server must:
+```sh
+npx hardhat verify --network testnet <CONTRACT ADDRESS> <CONSTRUCTOR_PARAMETERS>
+```
 
-1. Authenticate 0xAlice via a message wallet signature request.
-2. verify locally that `contentId` belongs to 0xBob.
-3. call the `hasAccess(0xBob, contentId, 0xAlice)` contract function
-4. verify that the result returned is `true`
+Example:
+```sh
+npx hardhat verify --network testnet 0x52f37c30C92B6C05E27c16cE69652169363534D6 "https://tbd.ltd/"
+```
 
 ## License
 
