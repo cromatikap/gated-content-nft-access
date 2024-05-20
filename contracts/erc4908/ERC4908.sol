@@ -81,7 +81,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         uint256 contentId,
         address consumer
     ) external view returns (bool) {
-        for (uint256 i = 0; i < balanceOf(author); i++) {
+        for (uint256 i = 0; i < balanceOf(consumer); i++) {
             if (
                 nftData[tokenOfOwnerByIndex(consumer, i)].hash ==
                 _hash(author, contentId)
