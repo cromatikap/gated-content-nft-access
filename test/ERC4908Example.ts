@@ -147,24 +147,46 @@ describe("ERC4908", function () {
   describe("Resources access check", function () {
     it("Should have access", async function () {
       /* Arrange */
-      const { erc4908Example } = await loadFixture(deployERC4908ExampleFixture);
+      const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
+      const { contentId, price, expirationTime } = paramsDefault;
+      const [Alice, Bob] = wallets;
+
+      let alice = await impersonate(erc4908Example, Alice);
+      let bob = await impersonate(erc4908Example, Bob);
+
+      await alice.write.setAccess([contentId, price, expirationTime]);
 
       /* Act */
-      console.log("WIP");
+      await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+
+      const hasAccess = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);
 
       /* Assert */
-      expect(true).to.equal(true);
+      expect(hasAccess).to.equal(true);
     });
 
     it("Should not have access", async function () {
       /* Arrange */
-      const { erc4908Example } = await loadFixture(deployERC4908ExampleFixture);
+      const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
+      const [Alice, Bob, Charlie] = wallets;
+      const { contentId, price, expirationTime } = paramsDefault;
+
+      let alice = await impersonate(erc4908Example, Alice);
+      let bob = await impersonate(erc4908Example, Bob);
+
+      await alice.write.setAccess([contentId, price, expirationTime]);
 
       /* Act */
-      console.log("WIP");
+
+      const hasAccessBob = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address])
+
+      await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+
+      const hasAccessCharlie = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Charlie.account.address]);
 
       /* Assert */
-      expect(true).to.equal(true);
-    });
-  });
-});
+      expect(hasAccessBob).to.equal(false);     
+      expect(hasAccessCharlie).to.equal(false);
+    })
+  })
+})
