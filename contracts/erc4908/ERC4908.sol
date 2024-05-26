@@ -80,18 +80,25 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         address author,
         uint256 contentId,
         address consumer
-    ) external view returns (bool) {
-        for (uint256 i = 0; i < balanceOf(consumer); i++) {
-            if (
-                nftData[tokenOfOwnerByIndex(consumer, i)].hash ==
-                _hash(author, contentId)
-            ) {
-                /* TODO: check expiration time */
+    ) external view returns (bool, string memory) {
+        bytes32 hash = _hash(author, contentId);
 
-                return true;
+        if (!this.existAccess(hash)) {
+            return (false, "access doesn't exist");
+        }
+
+        for (uint256 i = 0; i < balanceOf(consumer); i++) {
+            uint256 tokenId = tokenOfOwnerByIndex(consumer, i);
+            Metadata memory metadata = nftData[tokenId];
+
+            if (metadata.hash == hash) {
+                if (block.timestamp > metadata.expirationTime) {
+                    return (false, "access is expired");
+                }
+                return (true, "access granted");
             }
         }
-        return false;
+        return (false, "access doesn't exist");
     }
 
     function delAccess(uint256 contentId) external {

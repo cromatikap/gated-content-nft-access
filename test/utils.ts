@@ -15,7 +15,18 @@ const impersonate = async (contract: any, account: any) =>
 const paramsDefault = {
   contentId: BigInt(1),
   price: BigInt(2),
-  expirationTime: 3
+  expirationTime:  Math.floor(Date.now() / 1000) + 3600 // 1 hour in to future
 };
 
-export { impersonate, paramsDefault };
+async function increaseTime(seconds: number) {
+  await hre.network.provider.request({
+    method: "evm_increaseTime",
+    params: [seconds],
+  });
+  await hre.network.provider.request({
+    method: "evm_mine",
+    params: [],
+  });
+}
+
+export { impersonate, paramsDefault, increaseTime };

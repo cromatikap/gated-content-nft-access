@@ -2,7 +2,7 @@ import hre from "hardhat";
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers";
 import { expect } from "chai";
 import { keccak256, encodePacked } from "viem";
-import { impersonate, paramsDefault } from "./utils";
+import { impersonate, increaseTime, paramsDefault } from "./utils";
 
 describe("ERC4908", function () {
   async function deployERC4908ExampleFixture() {
@@ -157,12 +157,15 @@ describe("ERC4908", function () {
       await alice.write.setAccess([contentId, price, expirationTime]);
 
       /* Act */
+      const [hasAccessBeforeMint, messageBeforeMint] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);
       await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
-
-      const hasAccess = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);
+      const [hasAccessAfterMint, messageAfterMint] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);
 
       /* Assert */
-      expect(hasAccess).to.equal(true);
+      expect(hasAccessBeforeMint).to.equal(false);
+      expect(messageBeforeMint).to.equal("access doesn't exist");
+      expect(hasAccessAfterMint).to.equal(true);
+      expect(messageAfterMint).to.equal("access granted");
     });
 
     it("Should not have access", async function () {
@@ -177,16 +180,35 @@ describe("ERC4908", function () {
       await alice.write.setAccess([contentId, price, expirationTime]);
 
       /* Act */
-
-      const hasAccessBob = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address])
-
       await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
-
-      const hasAccessCharlie = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Charlie.account.address]);
+      const [hasAccessCharlie, messageCharlie] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Charlie.account.address]);
 
       /* Assert */
-      expect(hasAccessBob).to.equal(false);     
       expect(hasAccessCharlie).to.equal(false);
-    })
+      expect(messageCharlie).to.equal("access doesn't exist");
+    });
+
+    it("Should detect expired access", async function () {
+      /* Arrange */
+      const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
+      const [Alice, Bob] = wallets;
+      const { contentId, price, expirationTime } = paramsDefault;
+
+      let alice = await impersonate(erc4908Example, Alice);
+      let bob = await impersonate(erc4908Example, Bob);
+
+      /* Act */
+      await alice.write.setAccess([contentId, price, expirationTime]);
+      await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+      const [hasAccessBeforeExpiration, messageBeforeExpiration] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address])
+      await increaseTime(3600)
+      const [hasAccessAfterExpiration, messageAfterExpiration] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);
+
+      /* Assert */
+      expect(hasAccessBeforeExpiration).to.equal(true);
+      expect(messageBeforeExpiration).to.equal("access granted");
+      expect(hasAccessAfterExpiration).to.equal(false);
+      expect(messageAfterExpiration).to.equal("access is expired");
+    });
   })
 })
