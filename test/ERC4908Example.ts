@@ -107,7 +107,7 @@ describe("ERC4908", function () {
   });
 
   describe("Access minting", function () {
-    it("Should mint an NFT", async function () {
+    it("Should test if NFT minting is available", async function () {
 
       /* Arrange */
 
