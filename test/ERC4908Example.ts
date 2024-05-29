@@ -107,7 +107,7 @@ describe("ERC4908", function () {
   });
 
   describe("Access minting", function () {
-    it("Should mint an NFT", async function () {
+    it("Should test if NFT minting is available", async function () {
 
       /* Arrange */
 
@@ -126,21 +126,56 @@ describe("ERC4908", function () {
         Bob.account.address, 
         contentId, 
         Alice.account.address
-      ])
+      ], { value: price })
 
       const mintAvailableContent = bob.write.mint([
         Alice.account.address,
         contentId,
         Bob.account.address
-      ])
+      ], { value: price })
 
       /* Assert */
       
       await expect(mintUnavailableContent).to.be.rejectedWith(
         'MintUnavailable("0x320723cfc0bfa9b0f7c5b275a01ffa5e0f111f05723ba5df2b2684ab86bebe06")'
+      );  
+      await expect(mintAvailableContent).to.be.fulfilled; 
+    });
+
+    it("Should check if the expected NFT price is met", async function () {
+      
+      /* Arrange */
+
+      const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
+      const { contentId, price, expirationTime } = paramsDefault;
+      const [Alice, Bob] = wallets;
+
+      let alice = await impersonate(erc4908Example, Alice);
+      let bob = await impersonate(erc4908Example, Bob);
+
+      await alice.write.setAccess([contentId, price, expirationTime]);
+
+      /* Act */
+      
+      const mintInsufficientFunds = bob.write.mint([
+        Alice.account.address,
+        contentId,
+        Bob.account.address
+      ], { value: price - 1n})
+
+      const mintSufficientFunds = bob.write.mint([
+        Alice.account.address,
+        contentId,
+        Bob.account.address
+      ], { value: price })
+
+
+      /* Assert */
+
+      await expect(mintInsufficientFunds).to.be.rejectedWith(
+        'InsufficientFunds(2)'
       );
-      await expect(mintAvailableContent).to.be.fulfilled;
-      expect(await erc4908Example.read.totalSupply()).to.equal(1n);
+      await expect(mintSufficientFunds).to.be.fulfilled;
     });
   });
 
@@ -158,7 +193,7 @@ describe("ERC4908", function () {
 
       /* Act */
       const [hasAccessBeforeMint, messageBeforeMint] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);
-      await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+      await bob.write.mint([Alice.account.address, contentId, Bob.account.address], { value: price });
       const [hasAccessAfterMint, messageAfterMint] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);
 
       /* Assert */
@@ -180,7 +215,7 @@ describe("ERC4908", function () {
       await alice.write.setAccess([contentId, price, expirationTime]);
 
       /* Act */
-      await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+      await bob.write.mint([Alice.account.address, contentId, Bob.account.address], { value: price });
       const [hasAccessCharlie, messageCharlie] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Charlie.account.address]);
 
       /* Assert */
@@ -199,7 +234,7 @@ describe("ERC4908", function () {
 
       /* Act */
       await alice.write.setAccess([contentId, price, expirationTime]);
-      await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+      await bob.write.mint([Alice.account.address, contentId, Bob.account.address], { value: price });
       const [hasAccessBeforeExpiration, messageBeforeExpiration] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address])
       await increaseTime(3600)
       const [hasAccessAfterExpiration, messageAfterExpiration] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);

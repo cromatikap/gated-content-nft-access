@@ -23,7 +23,11 @@ interface IERC4908 {
     /// @param author address hashed with contentId to retrieve the content settings specified by the author
     /// @param contentId The content identification from the off-chain content service provider
     /// @param to The address of the content consumer
-    function mint(address author, uint256 contentId, address to) external;
+    function mint(
+        address author,
+        uint256 contentId,
+        address to
+    ) external payable;
 
     /// @notice Check for the access to a particular content from a particular consumer
     /// @dev This function is meant to be called by the content provider, the 2 first parameters
@@ -44,4 +48,8 @@ interface IERC4908 {
     /// @notice The author hasn't activated mint access for this contentId
     /// @param accessHash The hash of the author and contentId, used as the index of settings mapping
     error MintUnavailable(bytes32 accessHash);
+
+    /// @notice The author's minting fee has not been met by the consumer
+    /// @param expectedPrice A message indicating the minting fee is not met
+    error InsufficientFunds(uint256 expectedPrice);
 }

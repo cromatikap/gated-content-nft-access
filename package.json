@@ -1,7 +1,7 @@
 {
   "name": "hardhat-project",
   "scripts": {
-    "prettier": "prettier --write --plugin=prettier-plugin-solidity 'contracts/**/*.sol'",
+    "prettier": "prettier --write --plugin=prettier-plugin-solidity contracts/**/*.sol",
     "lint": "solhint contracts/**/*.sol",
     "compile": "hardhat compile",
     "test": "hardhat test"

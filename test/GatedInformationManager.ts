@@ -33,9 +33,9 @@ describe("Ipal Gated Knowledge Manager", function () {
     let bob = await impersonate(GKM, Bob);
 
     await alice.write.setAccess([contentId, price, expirationTime]);
-    await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
-    await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
-    await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+    await bob.write.mint([Alice.account.address, contentId, Bob.account.address], { value: price });
+    await bob.write.mint([Alice.account.address, contentId, Bob.account.address], { value: price });
+    await bob.write.mint([Alice.account.address, contentId, Bob.account.address], { value: price });
 
     /* Act */
     
