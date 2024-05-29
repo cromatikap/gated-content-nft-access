@@ -23,7 +23,11 @@ interface IERC4908 {
     /// @param author address hashed with contentId to retrieve the content settings specified by the author
     /// @param contentId The content identification from the off-chain content service provider
     /// @param to The address of the content consumer
-    function mint(address author, uint256 contentId, address to) external;
+    function mint(
+        address author,
+        uint256 contentId,
+        address to
+    ) external payable;
 
     /// @notice Check for the access to a particular content from a particular consumer
     /// @dev This function is meant to be called by the content provider, the 2 first parameters
