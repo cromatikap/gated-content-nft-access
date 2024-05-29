@@ -60,7 +60,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         address author,
         uint256 contentId,
         address to
-    ) public virtual {
+    ) public payable virtual {
         bytes32 settingsIndex = _hash(author, contentId);
         if (!this.existAccess(settingsIndex))
             revert MintUnavailable(settingsIndex);
