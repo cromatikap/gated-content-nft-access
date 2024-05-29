@@ -65,6 +65,12 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         if (!this.existAccess(settingsIndex))
             revert MintUnavailable(settingsIndex);
 
+        uint256 price = accessControl[settingsIndex].price;
+
+        if (msg.value < price) {
+            revert InsufficientFunds(price);
+        }
+
         uint256 tokenId = totalSupply();
 
         nftData[tokenId] = Metadata(
