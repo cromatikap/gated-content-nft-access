@@ -22,7 +22,7 @@ contract GatedKnowledgeManager is ERC4908, ERC721URIStorage {
         address author,
         uint256 contentId,
         address to
-    ) public override(ERC4908) {
+    ) public payable override(ERC4908) {
         super.mint(author, contentId, to);
         uint256 tokenId = totalSupply() - 1;
         _setTokenURI(
