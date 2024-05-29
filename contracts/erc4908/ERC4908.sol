@@ -98,7 +98,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
                 return (true, "access granted");
             }
         }
-        return (false, "access doesn't exist");
+        return (false, "user doesn't own the NFT");
     }
 
     function delAccess(uint256 contentId) external {

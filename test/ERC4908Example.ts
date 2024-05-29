@@ -163,7 +163,7 @@ describe("ERC4908", function () {
 
       /* Assert */
       expect(hasAccessBeforeMint).to.equal(false);
-      expect(messageBeforeMint).to.equal("access doesn't exist");
+      expect(messageBeforeMint).to.equal("user doesn't own the NFT");
       expect(hasAccessAfterMint).to.equal(true);
       expect(messageAfterMint).to.equal("access granted");
     });
@@ -185,7 +185,7 @@ describe("ERC4908", function () {
 
       /* Assert */
       expect(hasAccessCharlie).to.equal(false);
-      expect(messageCharlie).to.equal("access doesn't exist");
+      expect(messageCharlie).to.equal("user doesn't own the NFT");
     });
 
     it("Should detect expired access", async function () {
