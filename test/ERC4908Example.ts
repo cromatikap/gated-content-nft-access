@@ -141,6 +141,42 @@ describe("ERC4908", function () {
       );  
       await expect(mintAvailableContent).to.be.fulfilled; 
     });
+
+    it("Should check if the expected NFT price is met", async function () {
+      
+      /* Arrange */
+
+      const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
+      const { contentId, price, expirationTime } = paramsDefault;
+      const [Alice, Bob] = wallets;
+
+      let alice = await impersonate(erc4908Example, Alice);
+      let bob = await impersonate(erc4908Example, Bob);
+
+      await alice.write.setAccess([contentId, price, expirationTime]);
+
+      /* Act */
+      
+      const mintInsufficientFunds = bob.write.mint([
+        Alice.account.address,
+        contentId,
+        Bob.account.address
+      ], { value: price - 1n})
+
+      const mintSufficientFunds = bob.write.mint([
+        Alice.account.address,
+        contentId,
+        Bob.account.address
+      ], { value: price })
+
+
+      /* Assert */
+
+      await expect(mintInsufficientFunds).to.be.rejectedWith(
+        'InsufficientFunds(2)'
+      );
+      await expect(mintSufficientFunds).to.be.fulfilled;
+    });
   });
 
   describe("Resources access check", function () {
