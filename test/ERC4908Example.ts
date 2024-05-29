@@ -126,13 +126,13 @@ describe("ERC4908", function () {
         Bob.account.address, 
         contentId, 
         Alice.account.address
-      ])
+      ], { value: price })
 
       const mintAvailableContent = bob.write.mint([
         Alice.account.address,
         contentId,
         Bob.account.address
-      ])
+      ], { value: price })
 
       /* Assert */
       
@@ -193,7 +193,7 @@ describe("ERC4908", function () {
 
       /* Act */
       const [hasAccessBeforeMint, messageBeforeMint] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);
-      await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+      await bob.write.mint([Alice.account.address, contentId, Bob.account.address], { value: price });
       const [hasAccessAfterMint, messageAfterMint] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);
 
       /* Assert */
@@ -215,7 +215,7 @@ describe("ERC4908", function () {
       await alice.write.setAccess([contentId, price, expirationTime]);
 
       /* Act */
-      await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+      await bob.write.mint([Alice.account.address, contentId, Bob.account.address], { value: price });
       const [hasAccessCharlie, messageCharlie] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Charlie.account.address]);
 
       /* Assert */
@@ -234,7 +234,7 @@ describe("ERC4908", function () {
 
       /* Act */
       await alice.write.setAccess([contentId, price, expirationTime]);
-      await bob.write.mint([Alice.account.address, contentId, Bob.account.address]);
+      await bob.write.mint([Alice.account.address, contentId, Bob.account.address], { value: price });
       const [hasAccessBeforeExpiration, messageBeforeExpiration] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address])
       await increaseTime(3600)
       const [hasAccessAfterExpiration, messageAfterExpiration] = await erc4908Example.read.hasAccess([Alice.account.address, contentId, Bob.account.address]);
