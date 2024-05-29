@@ -48,4 +48,8 @@ interface IERC4908 {
     /// @notice The author hasn't activated mint access for this contentId
     /// @param accessHash The hash of the author and contentId, used as the index of settings mapping
     error MintUnavailable(bytes32 accessHash);
+
+    /// @notice The author's minting fee has not been met by the consumer
+    /// @param expectedPrice A message indicating the minting fee is not met
+    error InsufficientFunds(uint256 expectedPrice);
 }
