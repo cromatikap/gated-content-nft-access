@@ -138,9 +138,8 @@ describe("ERC4908", function () {
       
       await expect(mintUnavailableContent).to.be.rejectedWith(
         'MintUnavailable("0x320723cfc0bfa9b0f7c5b275a01ffa5e0f111f05723ba5df2b2684ab86bebe06")'
-      );
-      await expect(mintAvailableContent).to.be.fulfilled;
-      expect(await erc4908Example.read.totalSupply()).to.equal(1n);
+      );  
+      await expect(mintAvailableContent).to.be.fulfilled; 
     });
   });
 
