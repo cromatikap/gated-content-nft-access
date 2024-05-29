@@ -3,18 +3,18 @@ import "@nomicfoundation/hardhat-toolbox-viem";
 require('@dotenvx/dotenvx').config()
 
 const config: HardhatUserConfig = {
-  networks: {
+  networks: process.env.DEPLOYER_KEY ? {
     testnet: {
       url: "https://sepolia.base.org",
       chainId: 84532,
-      accounts: [process.env.DEPLOYER_KEY!]
+      accounts: [process.env.DEPLOYER_KEY]
     },
     mainnet: {
       url: "https://mainnet.base.org",
       chainId: 8453,
-      accounts: [process.env.DEPLOYER_KEY!]
+      accounts: [process.env.DEPLOYER_KEY]
     }
-  },
+  } : {},
   solidity: {
     version: "0.8.24",
     settings: {
