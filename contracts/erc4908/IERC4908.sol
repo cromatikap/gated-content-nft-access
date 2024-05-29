@@ -33,13 +33,13 @@ interface IERC4908 {
     /// @param author The address of the content author
     /// @param contentId The content identification from the off-chain content service provider
     /// @param consumer The address of the content consumer
-    /// @return bool True if the consumer has access to the content, false otherwise
-    /// @return string A message indicating the access status: "access doesn't exist", "access is expired", or "access granted"
+    /// @return response True if the consumer has access to the content, false otherwise
+    /// @return message A message indicating the access status: "access doesn't exist", "access is expired", or "access granted"
     function hasAccess(
         address author,
         uint256 contentId,
         address consumer
-    ) external view returns (bool, string memory);
+    ) external view returns (bool response, string memory message);
 
     /// @notice The author hasn't activated mint access for this contentId
     /// @param accessHash The hash of the author and contentId, used as the index of settings mapping

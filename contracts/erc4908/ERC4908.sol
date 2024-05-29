@@ -80,7 +80,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         address author,
         uint256 contentId,
         address consumer
-    ) external view returns (bool, string memory) {
+    ) external view returns (bool response, string memory message) {
         bytes32 hash = _hash(author, contentId);
 
         if (!this.existAccess(hash)) {
