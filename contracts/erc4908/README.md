@@ -19,21 +19,21 @@ interface IERC4908 {
 
     /// @notice Allows content access NFT to be minted
     /// @dev This function is meant to be called by the content author
-    /// @param contentId The content identification from the off-chain content service provider
+    /// @param resourceId The content identification from the off-chain content service provider
     /// @param price The mint price, in other terms the access price for this particular content
     /// @param expirationTime The expiration time of the access
-    function setAccess(uint256 contentId, uint256 price, uint256 expirationTime) external;
+    function setAccess(uint256 resourceId, uint256 price, uint256 expirationTime) external;
 
     /// @notice Disallows content access NFT to be minted, the remaining NFTs can still be used
     /// @dev This function is meant to be called by the content author
-    /// @param contentId The content identification from the off-chain content service provider
-    function delAccess(uint256 contentId) external;
+    /// @param resourceId The content identification from the off-chain content service provider
+    function delAccess(uint256 resourceId) external;
 
     /// @notice Mints a content access NFT
     /// @dev This function is meant to be called by the content consumer
     /// @param to The address of the content consumer
-    /// @param contentId The content identification from the off-chain content service provider
-    function mint(address to, uint256 contentId) external;
+    /// @param resourceId The content identification from the off-chain content service provider
+    function mint(address to, uint256 resourceId) external;
 
     /// @notice Check for the access to a particular content from a particular consumer
     /// @dev This function is meant to be called by the content provider, the 2 first parameters
@@ -41,9 +41,9 @@ interface IERC4908 {
     ///      `consumer` parameter is used to find if the consumer owns an NFT for this content
     ///      that is not expired.
     /// @param author The address of the content author
-    /// @param contentId The content identification from the off-chain content service provider
+    /// @param resourceId The content identification from the off-chain content service provider
     /// @param consumer The address of the content consumer
     /// @return bool True if the consumer has access to the content, false otherwise
-    function hasAccess(address author, uint256 contentId, address consumer) external view returns (bool);
+    function hasAccess(address author, uint256 resourceId, address consumer) external view returns (bool);
 }
 ```

@@ -13,7 +13,7 @@ const impersonate = async (contract: any, account: any) =>
 
 
 const paramsDefault = {
-  contentId: BigInt(1),
+  resourceId: BigInt(1),
   price: BigInt(2),
   expirationTime:  Math.floor(Date.now() / 1000) + 3600 // 1 hour in to future
 };

@@ -7,7 +7,7 @@ import {IERC4908} from "./IERC4908.sol";
 
 abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
     struct Settings {
-        uint256 contentId;
+        uint256 resourceId;
         uint256 price;
         uint32 expirationTime;
     }
@@ -16,7 +16,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
     // struct attached to each NFT id
     struct Metadata {
         bytes32 hash;
-        uint256 contentId;
+        uint256 resourceId;
         uint32 expirationTime;
     }
 
@@ -29,39 +29,39 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
 
     function _hash(
         address author,
-        uint256 contentId
+        uint256 resourceId
     ) private pure returns (bytes32) {
-        return keccak256(abi.encodePacked(author, contentId));
+        return keccak256(abi.encodePacked(author, resourceId));
     }
 
     function _setAccess(
         address author,
-        uint256 contentId,
+        uint256 resourceId,
         uint256 price,
         uint32 expirationTime
     ) private {
-        bytes32 hash = _hash(author, contentId);
-        accessControl[hash] = Settings(contentId, price, expirationTime);
+        bytes32 hash = _hash(author, resourceId);
+        accessControl[hash] = Settings(resourceId, price, expirationTime);
     }
 
     function setAccess(
-        uint256 contentId,
+        uint256 resourceId,
         uint256 price,
         uint32 expirationTime
     ) external {
-        _setAccess(msg.sender, contentId, price, expirationTime);
+        _setAccess(msg.sender, resourceId, price, expirationTime);
     }
 
     function existAccess(bytes32 hash) external view returns (bool) {
-        return accessControl[hash].contentId != 0;
+        return accessControl[hash].resourceId != 0;
     }
 
     function mint(
         address author,
-        uint256 contentId,
+        uint256 resourceId,
         address to
     ) public payable virtual {
-        bytes32 settingsIndex = _hash(author, contentId);
+        bytes32 settingsIndex = _hash(author, resourceId);
         if (!this.existAccess(settingsIndex))
             revert MintUnavailable(settingsIndex);
 
@@ -75,7 +75,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
 
         nftData[tokenId] = Metadata(
             settingsIndex,
-            accessControl[settingsIndex].contentId,
+            accessControl[settingsIndex].resourceId,
             accessControl[settingsIndex].expirationTime
         );
 
@@ -84,10 +84,10 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
 
     function hasAccess(
         address author,
-        uint256 contentId,
+        uint256 resourceId,
         address consumer
     ) external view returns (bool response, string memory message) {
-        bytes32 hash = _hash(author, contentId);
+        bytes32 hash = _hash(author, resourceId);
 
         if (!this.existAccess(hash)) {
             return (false, "access doesn't exist");
@@ -107,8 +107,8 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         return (false, "user doesn't own the NFT");
     }
 
-    function delAccess(uint256 contentId) external {
-        bytes32 hash = _hash(msg.sender, contentId);
+    function delAccess(uint256 resourceId) external {
+        bytes32 hash = _hash(msg.sender, resourceId);
         delete accessControl[hash];
     }
 

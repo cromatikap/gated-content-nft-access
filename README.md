@@ -33,8 +33,8 @@ npx hardhat ignition deploy ./ignition/modules/IpalBases.ts --network testnet --
 To prove that 0xAlice has access to 0xBob's specific information, the server must:
 
 1. Authenticate 0xAlice via a message wallet signature request.
-2. verify locally that `contentId` belongs to 0xBob.
-3. call the `hasAccess(0xBob, contentId, 0xAlice)` contract function
+2. verify locally that `resourceId` belongs to 0xBob.
+3. call the `hasAccess(0xBob, resourceId, 0xAlice)` contract function
 4. verify that the result returned is `true`
 
 ## License
