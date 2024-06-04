@@ -18,17 +18,6 @@ interface IERC4908 {
     /// @param resourceId The content identification from the off-chain content service provider
     function delAccess(uint256 resourceId) external;
 
-    /// @notice Mints a content access NFT
-    /// @dev This function is meant to be called by the content consumer
-    /// @param author address hashed with resourceId to retrieve the content settings specified by the author
-    /// @param resourceId The content identification from the off-chain content service provider
-    /// @param to The address of the content consumer
-    function mint(
-        address author,
-        uint256 resourceId,
-        address to
-    ) external payable;
-
     /// @notice Check for the access to a particular content from a particular consumer
     /// @dev This function is meant to be called by the content provider, the 2 first parameters
     ///      are meant to certify that the content ID is owned by the author while the last
@@ -44,6 +33,23 @@ interface IERC4908 {
         uint256 resourceId,
         address consumer
     ) external view returns (bool response, string memory message);
+
+    /// @notice Check if the given access hash exists
+    /// @dev This function is called internally but can be also handy for external use
+    /// @param hash The hash of the author and resourceId, used as the index of settings mapping
+    /// @return response True if the access hash exists, false otherwise
+    function existAccess(bytes32 hash) external view returns (bool response);
+
+    /// @notice Mints a content access NFT
+    /// @dev This function is meant to be called by the content consumer
+    /// @param author address hashed with resourceId to retrieve the content settings specified by the author
+    /// @param resourceId The content identification from the off-chain content service provider
+    /// @param to The address of the content consumer
+    function mint(
+        address author,
+        uint256 resourceId,
+        address to
+    ) external payable;
 
     /// @notice The author hasn't activated mint access for this resourceId
     /// @param accessHash The hash of the author and resourceId, used as the index of settings mapping
