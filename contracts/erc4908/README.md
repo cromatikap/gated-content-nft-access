@@ -1,5 +1,3 @@
-# ERC-4908: Gated resources NFT access
-
 ---
 eip: 4908
 title: Gated resources NFT access, an extension of EIP-721
@@ -12,6 +10,8 @@ category: ERC
 created: 2024-06-04
 requires: 721
 ---
+
+# ERC-4908: Gated resources NFT access
 
 ## Table of Contents
 
