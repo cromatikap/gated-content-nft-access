@@ -45,18 +45,18 @@ npx hardhat verify --network testnet <CONTRACT ADDRESS> <CONSTRUCTOR_PARAMETERS>
 
 Example:
 ```sh
-npx hardhat verify --network testnet 0x52f37c30C92B6C05E27c16cE69652169363534D6 "https://tbd.ltd/"
+npx hardhat verify --network testnet 0xd160F33090739B0999f846F54889FB344E4153f9 "https://arweave.net/Z9Gjl2bj793kIIIOOYlXVpHTZMRfJlicqybj8iY4KsE"
 ```
 
 ## Latest deployment
 
 Contract:
-- [basescan](https://sepolia.basescan.org/address/0x03d35db4ae8e3bce496daec27c604d1267601085#writeContract)
-- [blockscout](https://base-sepolia.blockscout.com/token/0x03D35dB4ae8e3bCe496DaeC27C604D1267601085)
+- [basescan](https://sepolia.basescan.org/address/0xd160F33090739B0999f846F54889FB344E4153f9#writeContract)
+- [blockscout](https://base-sepolia.blockscout.com/token/0xd160F33090739B0999f846F54889FB344E4153f9)
 
 NFT example:
-- [opensea](https://testnets.opensea.io/assets/base-sepolia/0x03d35db4ae8e3bce496daec27c604d1267601085/0)
-- [blockscout](https://base-sepolia.blockscout.com/token/0x03D35dB4ae8e3bCe496DaeC27C604D1267601085/instance/0)
+- [opensea](https://testnets.opensea.io/assets/base-sepolia/0xd160F33090739B0999f846F54889FB344E4153f9/0)
+- [blockscout](https://base-sepolia.blockscout.com/token/0xd160F33090739B0999f846F54889FB344E4153f9/instance/0)
 
 ## License
 
