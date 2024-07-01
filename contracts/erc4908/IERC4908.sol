@@ -8,7 +8,7 @@ interface IERC4908 {
     /// @param price The mint price, in other terms the access price for this particular content
     /// @param expirationTime The expiration time of the access
     function setAccess(
-        uint256 resourceId,
+        string calldata resourceId,
         uint256 price,
         uint32 expirationTime
     ) external;
@@ -16,7 +16,7 @@ interface IERC4908 {
     /// @notice Disallows content access NFT to be minted, the remaining NFTs can still be used
     /// @dev This function is meant to be called by the content author
     /// @param resourceId The content identification from the off-chain content service provider
-    function delAccess(uint256 resourceId) external;
+    function delAccess(string calldata resourceId) external;
 
     /// @notice Check for the access to a particular content from a particular consumer
     /// @dev This function is meant to be called by the content provider, the 2 first parameters
@@ -30,9 +30,9 @@ interface IERC4908 {
     /// @return message A message indicating the access status: "access doesn't exist", "access is expired", "access granted" or "user doesn't own the NFT"
     function hasAccess(
         address author,
-        uint256 resourceId,
+        string calldata resourceId,
         address consumer
-    ) external view returns (bool response, string memory message);
+    ) external view returns (bool response, string calldata message);
 
     /// @notice Check if the given access hash exists
     /// @dev This function is called internally but can be also handy for external use
@@ -47,7 +47,7 @@ interface IERC4908 {
     /// @param to The address of the content consumer
     function mint(
         address author,
-        uint256 resourceId,
+        string calldata resourceId,
         address to
     ) external payable;
 

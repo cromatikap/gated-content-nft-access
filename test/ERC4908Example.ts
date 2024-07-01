@@ -26,7 +26,7 @@ describe("ERC4908", function () {
       const { resourceId, price, expirationTime } = paramsDefault;
 
       const expectedHash = keccak256(encodePacked(
-        ['address', 'uint256'],
+        ['address', 'string'],
         [wallet.account.address, resourceId]
       ));
 
@@ -50,7 +50,7 @@ describe("ERC4908", function () {
       const { resourceId, price, expirationTime } = paramsDefault;
 
       const expectedHash = keccak256(encodePacked(
-        ['address', 'uint256'],
+        ['address', 'string'],
         [wallet.account.address, resourceId]
       ));
 
@@ -64,7 +64,7 @@ describe("ERC4908", function () {
 
       expect(before).to.equal(false);
       expect(after).to.equal(true);
-    })
+    });
 
     it("Should delete access", async function () {
 
@@ -74,7 +74,7 @@ describe("ERC4908", function () {
       const { resourceId, price, expirationTime } = paramsDefault;
       
       const expectedHash = keccak256(encodePacked(
-        ['address', 'uint256'],
+        ['address', 'string'],
         [wallet.account.address, resourceId]
       ));
 
@@ -100,7 +100,7 @@ describe("ERC4908", function () {
       expect(before.settings[0]).to.equal(resourceId);
       expect(before.settings[1]).to.equal(price);
       expect(before.settings[2]).to.equal(expirationTime);
-      expect(after.settings[0]).to.equal(0n);
+      expect(after.settings[0]).to.equal("");
       expect(after.settings[1]).to.equal(0n);
       expect(after.settings[2]).to.equal(0);
     });
@@ -137,7 +137,7 @@ describe("ERC4908", function () {
       /* Assert */
       
       await expect(mintUnavailableContent).to.be.rejectedWith(
-        'MintUnavailable("0x320723cfc0bfa9b0f7c5b275a01ffa5e0f111f05723ba5df2b2684ab86bebe06")'
+        'MintUnavailable("0x64b7b2d2900f927ae778f84917c8327d63cbb08f59126c14ead77f45b28ab7dd")'
       );  
       await expect(mintAvailableContent).to.be.fulfilled; 
     });
@@ -161,7 +161,7 @@ describe("ERC4908", function () {
         Alice.account.address,
         resourceId,
         Bob.account.address
-      ], { value: price - 1n})
+      ], { value: price - 1n })
 
       const mintSufficientFunds = bob.write.mint([
         Alice.account.address,
@@ -245,5 +245,5 @@ describe("ERC4908", function () {
       expect(hasAccessAfterExpiration).to.equal(false);
       expect(messageAfterExpiration).to.equal("access is expired");
     });
-  })
-})
+  });
+});

@@ -7,16 +7,16 @@ import {IERC4908} from "./IERC4908.sol";
 
 abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
     struct Settings {
-        uint256 resourceId;
+        string resourceId;
         uint256 price;
         uint32 expirationTime;
     }
-    mapping(bytes32 hash => Settings) public accessControl;
+    mapping(bytes32 => Settings) public accessControl;
 
     // struct attached to each NFT id
     struct Metadata {
         bytes32 hash;
-        uint256 resourceId;
+        string resourceId;
         uint32 expirationTime;
     }
 
@@ -29,14 +29,14 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
 
     function _hash(
         address author,
-        uint256 resourceId
+        string calldata resourceId
     ) private pure returns (bytes32) {
         return keccak256(abi.encodePacked(author, resourceId));
     }
 
     function _setAccess(
         address author,
-        uint256 resourceId,
+        string calldata resourceId,
         uint256 price,
         uint32 expirationTime
     ) private {
@@ -45,7 +45,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
     }
 
     function setAccess(
-        uint256 resourceId,
+        string calldata resourceId,
         uint256 price,
         uint32 expirationTime
     ) external {
@@ -53,12 +53,12 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
     }
 
     function existAccess(bytes32 hash) external view returns (bool) {
-        return accessControl[hash].resourceId != 0;
+        return bytes(accessControl[hash].resourceId).length != 0;
     }
 
     function mint(
         address author,
-        uint256 resourceId,
+        string calldata resourceId,
         address to
     ) public payable virtual {
         bytes32 settingsIndex = _hash(author, resourceId);
@@ -84,7 +84,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
 
     function hasAccess(
         address author,
-        uint256 resourceId,
+        string calldata resourceId,
         address consumer
     ) external view returns (bool response, string memory message) {
         bytes32 hash = _hash(author, resourceId);
@@ -107,7 +107,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         return (false, "user doesn't own the NFT");
     }
 
-    function delAccess(uint256 resourceId) external {
+    function delAccess(string calldata resourceId) external {
         bytes32 hash = _hash(msg.sender, resourceId);
         delete accessControl[hash];
     }
