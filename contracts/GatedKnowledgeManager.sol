@@ -27,7 +27,12 @@ contract GatedKnowledgeManager is ERC4908, ERC721URIStorage {
         uint256 tokenId = totalSupply() - 1;
         _setTokenURI(
             tokenId,
-            string.concat(_tokenURI, Strings.toString(tokenId))
+            _tokenURI
+
+            /*
+             * @dev to replace _tokenURI later 
+             */
+            // string.concat(_tokenURI, Strings.toString(tokenId))
         );
     }
 

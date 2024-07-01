@@ -3,7 +3,7 @@ require('@dotenvx/dotenvx').config();
 
 const IpalBasesModule = buildModule("IpalBasesModule", (m) => {
 
-  const ipalBases = m.contract("GatedKnowledgeManager", ["https://tbd.ltd/"]);
+  const ipalBases = m.contract("GatedKnowledgeManager", ["https://arweave.net/Z9Gjl2bj793kIIIOOYlXVpHTZMRfJlicqybj8iY4KsE"]);
 
   return { ipalBases };
 });
