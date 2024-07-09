@@ -126,6 +126,29 @@ describe("ERC4908", function () {
   });
 
   describe("Access minting", function () {
+    it("Should get access control values", async function () {
+
+      /* Arrange */
+
+      const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
+      const { resourceId, price, expirationTime } = paramsDefault;
+      const [Alice, Bob] = wallets;
+
+      let alice = await impersonate(erc4908Example, Alice);
+      let bob = await impersonate(erc4908Example, Bob);
+
+      await alice.write.setAccess([resourceId, price, expirationTime]);
+
+      /* Act */
+
+      const accessControl = await bob.read.getAccessControl([Alice.account.address ,resourceId]);
+
+      /* Assert */
+
+      expect(accessControl[0]).to.equal(price);
+      expect(accessControl[1]).to.equal(expirationTime);
+    });
+
     it("Should test if NFT minting is available", async function () {
 
       /* Arrange */
