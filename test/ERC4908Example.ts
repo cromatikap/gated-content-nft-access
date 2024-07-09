@@ -42,7 +42,7 @@ describe("ERC4908", function () {
       expect(access[2]).to.equal(expirationTime);
     });
 
-    it("Should check if access exists", async function () {
+    it("Should check if access exists using hash", async function () {
 
       /* Arrange */
 
@@ -59,6 +59,25 @@ describe("ERC4908", function () {
       const before = await erc4908Example.read.existAccess([expectedHash]);
       await erc4908Example.write.setAccess([resourceId, price, expirationTime]);
       const after = await erc4908Example.read.existAccess([expectedHash]);
+
+      /* Assert */
+
+      expect(before).to.equal(false);
+      expect(after).to.equal(true);
+    });
+
+    it("Should check if access exists using author + resourceId", async function () {
+
+      /* Arrange */
+
+      const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
+      const { resourceId, price, expirationTime } = paramsDefault;
+
+      /* Act */
+
+      const before = await erc4908Example.read.existAccess([wallet.account.address, resourceId]);
+      await erc4908Example.write.setAccess([resourceId, price, expirationTime]);
+      const after = await erc4908Example.read.existAccess([wallet.account.address, resourceId]);
 
       /* Assert */
 

@@ -40,6 +40,13 @@ interface IERC4908 {
     /// @return response True if the access hash exists, false otherwise
     function existAccess(bytes32 hash) external view returns (bool response);
 
+    /// @notice Check if the given access hash exists
+    /// @dev overload of existAccess(bytes32)
+    /// @param author The address of the content author
+    /// @param resourceId The content identification from the off-chain content service provider
+    /// @return response True if the access hash exists, false otherwise
+    function existAccess(address author, string calldata resourceId) external view returns (bool response);
+
     /// @notice Mints a content access NFT
     /// @dev This function is meant to be called by the content consumer
     /// @param author address hashed with resourceId to retrieve the content settings specified by the author
