@@ -9,7 +9,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
     struct Settings {
         string resourceId;
         uint256 price;
-        uint32 expirationTime;
+        uint32 expirationDuration;
     }
     mapping(bytes32 => Settings) public accessControl;
 
@@ -38,18 +38,18 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         address author,
         string calldata resourceId,
         uint256 price,
-        uint32 expirationTime
+        uint32 expirationDuration
     ) private {
         bytes32 hash = _hash(author, resourceId);
-        accessControl[hash] = Settings(resourceId, price, expirationTime);
+        accessControl[hash] = Settings(resourceId, price, expirationDuration);
     }
 
     function setAccess(
         string calldata resourceId,
         uint256 price,
-        uint32 expirationTime
+        uint32 expirationDuration
     ) external {
-        _setAccess(msg.sender, resourceId, price, expirationTime);
+        _setAccess(msg.sender, resourceId, price, expirationDuration);
     }
 
     function existAccess(bytes32 hash) external view returns (bool) {
@@ -61,7 +61,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
 
     function getAccessControl(address author, string calldata resourceId) external view override returns (uint256 price, uint32 expirationTime) {
         bytes32 hash = _hash(author, resourceId);
-        return (accessControl[hash].price, accessControl[hash].expirationTime);
+        return (accessControl[hash].price, accessControl[hash].expirationDuration);
     }
 
     function mint(
@@ -84,7 +84,7 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         nftData[tokenId] = Metadata(
             settingsIndex,
             accessControl[settingsIndex].resourceId,
-            accessControl[settingsIndex].expirationTime
+            accessControl[settingsIndex].expirationDuration + uint32(block.timestamp)
         );
 
         _safeMint(to, tokenId);

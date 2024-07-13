@@ -23,7 +23,7 @@ describe("ERC4908", function () {
       /* Arrange */
 
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
-      const { resourceId, price, expirationTime } = paramsDefault;
+      const { resourceId, price, expirationDuration } = paramsDefault;
 
       const expectedHash = keccak256(encodePacked(
         ['address', 'string'],
@@ -32,14 +32,14 @@ describe("ERC4908", function () {
 
       /* Act */
 
-      await erc4908Example.write.setAccess([resourceId, price, expirationTime])
+      await erc4908Example.write.setAccess([resourceId, price, expirationDuration])
       const access = await erc4908Example.read.accessControl([expectedHash]);
 
       /* Assert */
 
       expect(access[0]).to.equal(resourceId);
       expect(access[1]).to.equal(price);
-      expect(access[2]).to.equal(expirationTime);
+      expect(access[2]).to.equal(expirationDuration);
     });
 
     it("Should check if access exists using hash", async function () {
@@ -47,7 +47,7 @@ describe("ERC4908", function () {
       /* Arrange */
 
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
-      const { resourceId, price, expirationTime } = paramsDefault;
+      const { resourceId, price, expirationDuration } = paramsDefault;
 
       const expectedHash = keccak256(encodePacked(
         ['address', 'string'],
@@ -57,7 +57,7 @@ describe("ERC4908", function () {
       /* Act */
 
       const before = await erc4908Example.read.existAccess([expectedHash]);
-      await erc4908Example.write.setAccess([resourceId, price, expirationTime]);
+      await erc4908Example.write.setAccess([resourceId, price, expirationDuration]);
       const after = await erc4908Example.read.existAccess([expectedHash]);
 
       /* Assert */
@@ -71,12 +71,12 @@ describe("ERC4908", function () {
       /* Arrange */
 
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
-      const { resourceId, price, expirationTime } = paramsDefault;
+      const { resourceId, price, expirationDuration } = paramsDefault;
 
       /* Act */
 
       const before = await erc4908Example.read.existAccess([wallet.account.address, resourceId]);
-      await erc4908Example.write.setAccess([resourceId, price, expirationTime]);
+      await erc4908Example.write.setAccess([resourceId, price, expirationDuration]);
       const after = await erc4908Example.read.existAccess([wallet.account.address, resourceId]);
 
       /* Assert */
@@ -90,14 +90,14 @@ describe("ERC4908", function () {
       /* Arrange */
       
       const { erc4908Example, wallet } = await loadFixture(deployERC4908ExampleFixture);
-      const { resourceId, price, expirationTime } = paramsDefault;
+      const { resourceId, price, expirationDuration } = paramsDefault;
       
       const expectedHash = keccak256(encodePacked(
         ['address', 'string'],
         [wallet.account.address, resourceId]
       ));
 
-      await erc4908Example.write.setAccess([resourceId, price, expirationTime]);
+      await erc4908Example.write.setAccess([resourceId, price, expirationDuration]);
 
       /* Act */
 
@@ -118,7 +118,7 @@ describe("ERC4908", function () {
       // Check if all settings are reset
       expect(before.settings[0]).to.equal(resourceId);
       expect(before.settings[1]).to.equal(price);
-      expect(before.settings[2]).to.equal(expirationTime);
+      expect(before.settings[2]).to.equal(expirationDuration);
       expect(after.settings[0]).to.equal("");
       expect(after.settings[1]).to.equal(0n);
       expect(after.settings[2]).to.equal(0);
@@ -131,13 +131,13 @@ describe("ERC4908", function () {
       /* Arrange */
 
       const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
-      const { resourceId, price, expirationTime } = paramsDefault;
+      const { resourceId, price, expirationDuration } = paramsDefault;
       const [Alice, Bob] = wallets;
 
       let alice = await impersonate(erc4908Example, Alice);
       let bob = await impersonate(erc4908Example, Bob);
 
-      await alice.write.setAccess([resourceId, price, expirationTime]);
+      await alice.write.setAccess([resourceId, price, expirationDuration]);
 
       /* Act */
 
@@ -146,7 +146,7 @@ describe("ERC4908", function () {
       /* Assert */
 
       expect(accessControl[0]).to.equal(price);
-      expect(accessControl[1]).to.equal(expirationTime);
+      expect(accessControl[1]).to.equal(expirationDuration);
     });
 
     it("Should test if NFT minting is available", async function () {
@@ -154,13 +154,13 @@ describe("ERC4908", function () {
       /* Arrange */
 
       const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
-      const { resourceId, price, expirationTime } = paramsDefault;
+      const { resourceId, price, expirationDuration } = paramsDefault;
       const [Alice, Bob] = wallets;
 
       let alice = await impersonate(erc4908Example, Alice);
       let bob = await impersonate(erc4908Example, Bob);
 
-      await alice.write.setAccess([resourceId, price, expirationTime]);
+      await alice.write.setAccess([resourceId, price, expirationDuration]);
 
       /* Act */
 
@@ -189,13 +189,13 @@ describe("ERC4908", function () {
       /* Arrange */
 
       const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
-      const { resourceId, price, expirationTime } = paramsDefault;
+      const { resourceId, price, expirationDuration } = paramsDefault;
       const [Alice, Bob] = wallets;
 
       let alice = await impersonate(erc4908Example, Alice);
       let bob = await impersonate(erc4908Example, Bob);
 
-      await alice.write.setAccess([resourceId, price, expirationTime]);
+      await alice.write.setAccess([resourceId, price, expirationDuration]);
 
       /* Act */
       
@@ -225,13 +225,13 @@ describe("ERC4908", function () {
     it("Should have access", async function () {
       /* Arrange */
       const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
-      const { resourceId, price, expirationTime } = paramsDefault;
+      const { resourceId, price, expirationDuration } = paramsDefault;
       const [Alice, Bob] = wallets;
 
       let alice = await impersonate(erc4908Example, Alice);
       let bob = await impersonate(erc4908Example, Bob);
 
-      await alice.write.setAccess([resourceId, price, expirationTime]);
+      await alice.write.setAccess([resourceId, price, expirationDuration]);
 
       /* Act */
       const [hasAccessBeforeMint, messageBeforeMint] = await erc4908Example.read.hasAccess([Alice.account.address, resourceId, Bob.account.address]);
@@ -249,12 +249,12 @@ describe("ERC4908", function () {
       /* Arrange */
       const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
       const [Alice, Bob, Charlie] = wallets;
-      const { resourceId, price, expirationTime } = paramsDefault;
+      const { resourceId, price, expirationDuration } = paramsDefault;
 
       let alice = await impersonate(erc4908Example, Alice);
       let bob = await impersonate(erc4908Example, Bob);
 
-      await alice.write.setAccess([resourceId, price, expirationTime]);
+      await alice.write.setAccess([resourceId, price, expirationDuration]);
 
       /* Act */
       await bob.write.mint([Alice.account.address, resourceId, Bob.account.address], { value: price });
@@ -269,16 +269,17 @@ describe("ERC4908", function () {
       /* Arrange */
       const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
       const [Alice, Bob] = wallets;
-      const { resourceId, price, expirationTime } = paramsDefault;
+      const { resourceId, price, expirationDuration } = paramsDefault;
 
       let alice = await impersonate(erc4908Example, Alice);
       let bob = await impersonate(erc4908Example, Bob);
 
       /* Act */
-      await alice.write.setAccess([resourceId, price, expirationTime]);
+      await alice.write.setAccess([resourceId, price, expirationDuration]);
       await bob.write.mint([Alice.account.address, resourceId, Bob.account.address], { value: price });
+      await increaseTime(1)
       const [hasAccessBeforeExpiration, messageBeforeExpiration] = await erc4908Example.read.hasAccess([Alice.account.address, resourceId, Bob.account.address])
-      await increaseTime(3600)
+      await increaseTime(3)
       const [hasAccessAfterExpiration, messageAfterExpiration] = await erc4908Example.read.hasAccess([Alice.account.address, resourceId, Bob.account.address]);
 
       /* Assert */

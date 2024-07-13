@@ -26,13 +26,13 @@ describe("Ipal Gated Knowledge Manager", function () {
     /* Arrange */
     
     const { GKM, baseUri, wallets } = await loadFixture(deployGatedKnowledgeManagerFixture);
-    const { resourceId, price, expirationTime } = paramsDefault;
+    const { resourceId, price, expirationDuration } = paramsDefault;
     const [Alice, Bob] = wallets;
 
     let alice = await impersonate(GKM, Alice);
     let bob = await impersonate(GKM, Bob);
 
-    await alice.write.setAccess([resourceId, price, expirationTime]);
+    await alice.write.setAccess([resourceId, price, expirationDuration]);
     await bob.write.mint([Alice.account.address, resourceId, Bob.account.address], { value: price });
     await bob.write.mint([Alice.account.address, resourceId, Bob.account.address], { value: price });
     await bob.write.mint([Alice.account.address, resourceId, Bob.account.address], { value: price });
