@@ -55,13 +55,22 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
     function existAccess(bytes32 hash) external view returns (bool) {
         return bytes(accessControl[hash].resourceId).length != 0;
     }
-    function existAccess(address author, string calldata resourceId) external view returns (bool) {
+    function existAccess(
+        address author,
+        string calldata resourceId
+    ) external view returns (bool) {
         return this.existAccess(_hash(author, resourceId));
     }
 
-    function getAccessControl(address author, string calldata resourceId) external view override returns (uint256 price, uint32 expirationTime) {
+    function getAccessControl(
+        address author,
+        string calldata resourceId
+    ) external view override returns (uint256 price, uint32 expirationTime) {
         bytes32 hash = _hash(author, resourceId);
-        return (accessControl[hash].price, accessControl[hash].expirationDuration);
+        return (
+            accessControl[hash].price,
+            accessControl[hash].expirationDuration
+        );
     }
 
     function mint(
@@ -84,7 +93,8 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         nftData[tokenId] = Metadata(
             settingsIndex,
             accessControl[settingsIndex].resourceId,
-            accessControl[settingsIndex].expirationDuration + uint32(block.timestamp)
+            accessControl[settingsIndex].expirationDuration +
+                uint32(block.timestamp)
         );
 
         _safeMint(to, tokenId);

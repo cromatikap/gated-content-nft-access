@@ -45,7 +45,10 @@ interface IERC4908 {
     /// @param author The address of the content author
     /// @param resourceId The content identification from the off-chain content service provider
     /// @return response True if the access hash exists, false otherwise
-    function existAccess(address author, string calldata resourceId) external view returns (bool response);
+    function existAccess(
+        address author,
+        string calldata resourceId
+    ) external view returns (bool response);
 
     /// @notice Get the requirement settings to mint NFT access for a particular resource
     /// @dev This function is meant to be called by the content consumer who wants to mint an NFT
@@ -53,7 +56,10 @@ interface IERC4908 {
     /// @param resourceId The content identification from the off-chain service provider
     /// @return price The mint price, in other terms the access price for this particular resource
     /// @return expirationTime The duration of the access for each NFT minted
-    function getAccessControl(address author, string calldata resourceId) external view returns (uint256 price, uint32 expirationTime);
+    function getAccessControl(
+        address author,
+        string calldata resourceId
+    ) external view returns (uint256 price, uint32 expirationTime);
 
     /// @notice Mints a content access NFT
     /// @dev This function is meant to be called by the content consumer

@@ -22,10 +22,11 @@ To prove that 0xAlice has access to 0xBob's specific information, the server mus
 npm install
 ```
 
-### Running tests and linting
+### Tests & cleaning
 
 ```sh
 npm run test
+npm run prettier
 npm run lint
 ```
 
