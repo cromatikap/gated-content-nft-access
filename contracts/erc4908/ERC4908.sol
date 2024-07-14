@@ -65,7 +65,12 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
     function getAccessControl(
         address author,
         string calldata resourceId
-    ) external view override returns (uint256 price, uint32 expirationTime) {
+    )
+        external
+        view
+        override
+        returns (uint256 price, uint32 expirationDuration)
+    {
         bytes32 hash = _hash(author, resourceId);
         return (
             accessControl[hash].price,
