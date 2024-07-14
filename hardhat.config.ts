@@ -30,7 +30,7 @@ const config: HardhatUserConfig = {
     }
   },
   gasReporter: {
-    enabled: true,
+    enabled: process.env.REPORT_GAS != 'false',
     currency: 'EUR',
     gasPrice: 1,
 
