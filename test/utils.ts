@@ -29,4 +29,13 @@ async function increaseTime(seconds: number) {
   });
 }
 
-export { impersonate, paramsDefault, increaseTime };
+async function getBlockTimestamp() {
+  const block = await hre.network.provider.request({
+    method: "eth_getBlockByNumber",
+    params: ["latest", false], // false means we don't need full transaction objects
+  });
+
+  return Number(block.timestamp);
+}
+
+export { impersonate, paramsDefault, increaseTime, getBlockTimestamp };

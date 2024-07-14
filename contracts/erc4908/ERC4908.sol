@@ -104,11 +104,15 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
         address author,
         string calldata resourceId,
         address consumer
-    ) external view returns (bool response, string memory message) {
+    )
+        external
+        view
+        returns (bool response, string memory message, int32 expirationTime)
+    {
         bytes32 hash = _hash(author, resourceId);
 
         if (!this.existAccess(hash)) {
-            return (false, "access doesn't exist");
+            return (false, "access doesn't exist", -1);
         }
 
         bool hasExpired = false;
@@ -122,14 +126,14 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
                     hasExpired = true;
                     continue;
                 }
-                return (true, "access granted");
+                return (true, "access granted", int32(metadata.expirationTime));
             }
         }
 
         return
             hasExpired
-                ? (false, "access is expired")
-                : (false, "user doesn't own the NFT");
+                ? (false, "access is expired", -1)
+                : (false, "user doesn't own the NFT", -1);
     }
 
     function delAccess(string calldata resourceId) external {

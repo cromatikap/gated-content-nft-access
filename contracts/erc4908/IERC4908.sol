@@ -28,11 +28,15 @@ interface IERC4908 {
     /// @param consumer The address of the content consumer
     /// @return response True if the consumer has access to the content, false otherwise
     /// @return message A message indicating the access status: "access doesn't exist", "access is expired", "access granted" or "user doesn't own the NFT"
+    /// @return expirationTime The expiration time of the access if message is "access granted", -1 otherwise
     function hasAccess(
         address author,
         string calldata resourceId,
         address consumer
-    ) external view returns (bool response, string calldata message);
+    )
+        external
+        view
+        returns (bool response, string calldata message, int32 expirationTime);
 
     /// @notice Check if the given access hash exists
     /// @dev This function is called internally but can be also handy for external use

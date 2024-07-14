@@ -2,7 +2,7 @@ import hre from "hardhat";
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers";
 import { expect } from "chai";
 import { keccak256, encodePacked } from "viem";
-import { impersonate, increaseTime, paramsDefault } from "./utils";
+import { getBlockTimestamp, impersonate, increaseTime, paramsDefault } from "./utils";
 
 describe("ERC4908", function () {
   async function deployERC4908ExampleFixture() {
@@ -223,7 +223,9 @@ describe("ERC4908", function () {
 
   describe("Resources access check", function () {
     it("Should have access", async function () {
+      
       /* Arrange */
+      
       const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
       const { resourceId, price, expirationDuration } = paramsDefault;
       const [Alice, Bob] = wallets;
@@ -234,15 +236,23 @@ describe("ERC4908", function () {
       await alice.write.setAccess([resourceId, price, expirationDuration]);
 
       /* Act */
-      const [hasAccessBeforeMint, messageBeforeMint] = await erc4908Example.read.hasAccess([Alice.account.address, resourceId, Bob.account.address]);
+      
+      const [hasAccessBeforeMint, messageBeforeMint, expirationTimeBeforeMint] = await erc4908Example.read.hasAccess([Alice.account.address, resourceId, Bob.account.address]);
+      
       await bob.write.mint([Alice.account.address, resourceId, Bob.account.address], { value: price });
-      const [hasAccessAfterMint, messageAfterMint] = await erc4908Example.read.hasAccess([Alice.account.address, resourceId, Bob.account.address]);
+      const mintTime = await getBlockTimestamp();
+
+      const [hasAccessAfterMint, messageAfterMint, expirationTimeAfterMint] = await erc4908Example.read.hasAccess([Alice.account.address, resourceId, Bob.account.address]);
 
       /* Assert */
+      
       expect(hasAccessBeforeMint).to.equal(false);
       expect(messageBeforeMint).to.equal("user doesn't own the NFT");
+      expect(expirationTimeBeforeMint).to.equal(-1);
+
       expect(hasAccessAfterMint).to.equal(true);
       expect(messageAfterMint).to.equal("access granted");
+      expect(expirationTimeAfterMint).to.equal(mintTime + expirationDuration);
     });
 
     it("Should not have access", async function () {
