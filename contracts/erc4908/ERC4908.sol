@@ -111,18 +111,25 @@ abstract contract ERC4908 is IERC4908, ERC721, ERC721Enumerable {
             return (false, "access doesn't exist");
         }
 
+        bool hasExpired = false;
+
         for (uint256 i = 0; i < balanceOf(consumer); i++) {
             uint256 tokenId = tokenOfOwnerByIndex(consumer, i);
             Metadata memory metadata = nftData[tokenId];
 
             if (metadata.hash == hash) {
                 if (block.timestamp > metadata.expirationTime) {
-                    return (false, "access is expired");
+                    hasExpired = true;
+                    continue;
                 }
                 return (true, "access granted");
             }
         }
-        return (false, "user doesn't own the NFT");
+
+        return
+            hasExpired
+                ? (false, "access is expired")
+                : (false, "user doesn't own the NFT");
     }
 
     function delAccess(string calldata resourceId) external {

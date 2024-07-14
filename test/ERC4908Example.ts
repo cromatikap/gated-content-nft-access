@@ -273,9 +273,9 @@ describe("ERC4908", function () {
 
       let alice = await impersonate(erc4908Example, Alice);
       let bob = await impersonate(erc4908Example, Bob);
+      await alice.write.setAccess([resourceId, price, expirationDuration]);
 
       /* Act */
-      await alice.write.setAccess([resourceId, price, expirationDuration]);
       await bob.write.mint([Alice.account.address, resourceId, Bob.account.address], { value: price });
       await increaseTime(1)
       const [hasAccessBeforeExpiration, messageBeforeExpiration] = await erc4908Example.read.hasAccess([Alice.account.address, resourceId, Bob.account.address])
@@ -287,6 +287,26 @@ describe("ERC4908", function () {
       expect(messageBeforeExpiration).to.equal("access granted");
       expect(hasAccessAfterExpiration).to.equal(false);
       expect(messageAfterExpiration).to.equal("access is expired");
+    });
+
+    it("Should allow access if at least one NFT is not expired", async function () {
+      /* Arrange */
+      const { erc4908Example, wallets } = await loadFixture(deployERC4908ExampleFixture);
+      const [Alice, Bob] = wallets;
+      const { resourceId, price, expirationDuration } = paramsDefault;
+
+      let alice = await impersonate(erc4908Example, Alice);
+      let bob = await impersonate(erc4908Example, Bob);
+      await alice.write.setAccess([resourceId, price, expirationDuration]);
+
+      /* Act */
+      await bob.write.mint([Alice.account.address, resourceId, Bob.account.address], { value: price });
+      await increaseTime(1)
+      await bob.write.mint([Alice.account.address, resourceId, Bob.account.address], { value: price });
+      await increaseTime(3)
+      const [hasAccess, _] = await erc4908Example.read.hasAccess([Alice.account.address, resourceId, Bob.account.address]);
+
+      expect(hasAccess).to.equal(true);
     });
   });
 });
