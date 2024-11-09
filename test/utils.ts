@@ -6,7 +6,7 @@ import hre from "hardhat";
  */
 const impersonate = async (contract: any, account: any) =>
   await hre.viem.getContractAt(
-    "ERC4908Example",
+    "GatedKnowledgeManager",
     contract.address,
     { client: { wallet: account } }
   );

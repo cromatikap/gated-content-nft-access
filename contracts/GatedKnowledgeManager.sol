@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 // Uncomment this line to use console.log() for debugging
 // import "hardhat/console.sol";
 
-import {ERC4908} from "./erc4908/ERC4908.sol";
+import {ERC4908} from "erc-4908/contracts/ERC4908.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
@@ -19,7 +19,7 @@ contract GatedKnowledgeManager is ERC4908, ERC721URIStorage {
     }
 
     function mint(
-        address author,
+        address payable author,
         string calldata resourceId,
         address to
     ) public payable override(ERC4908) {

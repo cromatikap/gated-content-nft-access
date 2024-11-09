@@ -17,6 +17,7 @@
   "dependencies": {
     "@dotenvx/dotenvx": "^0.37.1",
     "@openzeppelin/contracts": "^5.0.2",
+    "erc-4908": "^1.0.7",
     "solhint": "^4.5.4"
   }
 }
